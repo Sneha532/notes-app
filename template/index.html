@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FastAPI MongoDB Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>Notes App</h1>
+            <ul class="nav-links">
+                <li><a href="/" class="active">Home</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if error %}
+            <div class="document error">
+                <h2>Database Error</h2>
+                <p>{{ error }}</p>
+            </div>
+        {% else %}
+            <!-- Notes Form Section -->
+            <section class="notes-form">
+                <h2>Start adding your notes to the database</h2>
+                <form method="POST" action="/send">
+                    <div class="form-group">
+                        <label for="title">Note Title</label>
+                        <input type="text" id="title" name="title" required placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Note Description</label>
+                        <textarea id="description" name="description" rows="4" required placeholder="Enter description"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Add Note</button>
+                </form>
+            </section>
+
+            <!-- Notes Display Section -->
+            <section class="notes-display">
+                <h2>Your Notes</h2>
+                {% if docs and docs|length > 0 %}
+                    <div class="notes-grid">
+                        {% for doc in docs %}
+                            <div class="note-card">
+                                <h3>{{ doc.title }}</h3>
+                                <p>{{ doc.description }}</p>
+                                <div class="note-footer">
+                                    <small>Created: {{ doc.created_at }}</small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="document">
+                        <p>No notes found. Create your first note above!</p>
+                    </div>
+                {% endif %}
+            </section>
+        {% endif %}
+    </div>
+</body>
+</html>
